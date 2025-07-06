@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import threading
 
-api = pyhula.UserApi()
+uapi = pyhula.UserApi()
 
 def detect_ball(frame, Lcol, Ucol, col):
     # Define HSV range for red color
@@ -45,7 +45,7 @@ Lyell = np.array([20, 150, 70])
 Uyell = np.array([58, 255, 255 ])
 
 def vid():
-    video = hula_video(hula_api=api,display=False)
+    video = hula_video(hula_api=uapi,display=False)
     video.video_mode_on()
 
     while True:
@@ -54,7 +54,8 @@ def vid():
         blueball = detect_ball(frame, Lblue, Ublue, (255, 0, 0))
         yellball = detect_ball(frame, Lyell, Uyell, (0, 255, 255))
         print(redball, blueball, yellball)
-        
+        pos = uapi.get_coordinate()
+        cv2.putText(frame, str(pos), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
         cv2.imshow("NASS", frame)
         cv2.waitKey(1)
         #break       
@@ -63,16 +64,20 @@ def vid():
     cv2.destroyAllWindows()
     video.close()
 
-if not api.connect():
+if not uapi.connect():
     print("Connection Error")
 else: 
     print("Connection to station by Wifi")
     threading.Thread(target=vid).start()
-    # api.single_fly_takeoff()
-    # api.single_fly_down(20)
-    # api.single_fly_forward(205) #subject to changes
-    # api.single_fly_up(150)
-    # api.single_fly_forward(129)
-    # api.single_fly_down(100)
-    # api.single_fly_forward(200)
-    # api.single_fly_touchdown()
+    uapi.Plane_cmd_camera_angle(1,30)
+    uapi.single_fly_takeoff()
+    uapi.single_fly_up(40)
+    uapi.single_fly_back(20)
+    uapi.single_fly_left(85)
+    uapi.single_fly_straight_flight(0,50,-40)
+    time.sleep(3)
+    uapi.single_fly_straight_flight(0,-50,40)
+    uapi.single_fly_right(170)
+    uapi.single_fly_straight_flight(0,50,-40)
+    time.sleep(3)
+    uapi.single_fly_touchdown()
