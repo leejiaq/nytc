@@ -1,13 +1,13 @@
 import pyhula
 import time
 from hula_video import hula_video
-from tflite_detector import tflite_detector
+from onnxdetector import onnxdetector
 import cv2
 import numpy as np
 import threading
 
 uapi = pyhula.UserApi()
-obj_detected = None
+align = False
 
 detected = False
 
@@ -17,20 +17,35 @@ def correct():
 
 def align_to_tflite(obj):
     #uapi.single_fly_straight_flight()
-    uapi.single_fly_straight_flight(1280/2 - obj["x"], 720/2 - obj["y"], 0)
+    print("aligning", obj)
+    correction = [0, 0]
+    correction_step = 10
+    if obj['x'] > 580:
+        correction[0] = -1
+    else:
+        if obj['x'] < 700:
+            correction[0] = 1
+    if obj['y'] > 300:
+        correction[1] = -1
+    else:
+        if obj['y'] < 420:
+            correction[1] = 1
+    print("correction to logo: ", str(correction))
+    uapi.single_fly_straight_flight(correction[0]*correction_step, correction[1]*correction_step, 0)
 
 def vid():
-    global obj_detected
+    global align
     global detected
     video = hula_video(hula_api=uapi,display=False)
-    detector = tflite_detector(model="nytc-balanced-4Aug.tflite",label="label.txt")
+    detector = onnxdetector(model="nytc2025-fast2.onnx",label="classes.txt")
     video.video_mode_on()
     while True:
         frame = video.get_video()
         object_found, frame = detector.detect(frame)
         if not object_found is None:
             print(F"Found object: {object_found}")
-            obj_detected = object_found
+            if align:
+                align_to_tflite(object_found)
             detected = True
         else:
             obj_detected = None
@@ -49,6 +64,13 @@ def qr_align(id):
         uapi.single_fly_Qrcode_align(0, id)
         time.sleep(0.1)
 
+def align_to_logo(duration):
+    global align
+    align = True
+    time.sleep(duration) 
+    align = False
+    time.sleep(2)
+
 if not uapi.connect():
     print('connect error')
 else:
@@ -56,14 +78,15 @@ else:
     uapi.Plane_cmd_camera_angle(1,90)
 
     #5
-# def shity():
     threading.Thread(target=vid).start()
+    time.sleep(10) # video feed takes an abysmally long time to load
     uapi.single_fly_takeoff()
-    uapi.single_fly_Qrcode_align(0, 0)
-    time.sleep(4)
-    uapi.single_fly_forward(70)
+    uapi.single_fly_up(30)
+    #uapi.single_fly_Qrcode_align(0, 0)
+    #time.sleep(4)
+    uapi.single_fly_forward(42)
     time.sleep(3)
-    uapi.single_fly_left(55)
+    uapi.single_fly_left(23)
     time.sleep(3)
     uapi.single_fly_touchdown()
     time.sleep(8)
@@ -71,19 +94,18 @@ else:
     uapi.single_fly_takeoff()
     correct()
     time.sleep(3)
-    uapi.single_fly_forward(60)
+    uapi.single_fly_forward(40)
     time.sleep(3)
     uapi.single_fly_touchdown()
     time.sleep(7)
     #1
     uapi.single_fly_takeoff()
     correct()
+    #uapi.single_fly_down(30)
+    #correct()
     time.sleep(3)
-    uapi.single_fly_right(55)
-    time.sleep(3) 
-    for i in range(5):
-        if obj_detected: 
-            align_to_tflite(obj_detected)
+    uapi.single_fly_right(40)
+    align_to_logo(10)
     uapi.single_fly_touchdown()
     time.sleep(7)
     #2\
@@ -100,10 +122,9 @@ else:
     time.sleep(3)
     uapi.single_fly_left(55)
     time.sleep(3)
-    for i in range(5):
-        if obj_detected: 
-            align_to_tflite(obj_detected)
-            break
+    align = True
+    time.sleep(10)
+    align = False
     uapi.single_fly_touchdown()
     time.sleep(7)
     #3
@@ -121,11 +142,9 @@ else:
     correct()
     time.sleep(3)
     uapi.single_fly_back(60)
+    align = True
     time.sleep(3)
-    for i in range(5):
-        if obj_detected: 
-            align_to_tflite(obj_detected)
-            break
+    align = False
     uapi.single_fly_touchdown()
     time.sleep(7)
     #8
@@ -134,4 +153,4 @@ else:
     time.sleep(3)
     uapi.single_fly_left(65)
     time.sleep(3)
-    uapi.single_fly_touchdown() 
+    uapi.single_fly_touchdown()
