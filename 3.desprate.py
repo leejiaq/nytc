@@ -78,9 +78,9 @@ else:
     uapi.Plane_cmd_camera_angle(1,90)
 
     threading.Thread(target=vid).start()
-    uapi.single_fly_takeoff()
-    uapi.single_fly_up(int(120/CM))
-    uapi.single_fly_forward(int(90/CM))
+    uapi.single_fly_takeoff() # MAKE SURE CAM ANGLE IS DOWN
+    uapi.single_fly_up(int(120/CM))  # 220 cm
+    uapi.single_fly_forward(int(120/CM))
     time.sleep(2)
-    uapi.single_fly_back(int(60/CM))
+    uapi.single_fly_back(int(50/CM))
     uapi.single_fly_touchdown()
