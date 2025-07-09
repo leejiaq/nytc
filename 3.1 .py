@@ -12,7 +12,7 @@ align = False
 detected = False
 
 def correct():
-    deviation_coords = [-uapi.get_coordinate()[0], -uapi.get_coordinate()[1]]
+    deviationdef_coords = [-uapi.get_coordinate()[0], -uapi.get_coordinate()[1]]
     uapi.single_fly_straight_flight(deviation_coords[0], deviation_coords[1], 0)
 
 def align_to_tflite(obj):
@@ -70,17 +70,86 @@ def align_to_logo(duration):
     time.sleep(duration) 
     align = False
     time.sleep(2)
-CM = 1.2
+
 if not uapi.connect():
     print('connect error')
 else:
     print('success')
     uapi.Plane_cmd_camera_angle(1,90)
 
+    #5
     threading.Thread(target=vid).start()
     uapi.single_fly_takeoff()
-    uapi.single_fly_up(int(120/CM))
-    uapi.single_fly_forward(int(90/CM))
-    time.sleep(2)
-    uapi.single_fly_back(int(60/CM))
+    uapi.single_fly_up(30)
+    #uapi.single_fly_Qrcode_align(0, 0)
+    #time.sleep(4)
+    uapi.single_fly_forward(42)
+    time.sleep(3)
+    uapi.single_fly_left(23)
+    time.sleep(3)
+    uapi.single_fly_touchdown()
+    time.sleep(8)
+    #6
+    uapi.single_fly_takeoff()
+    correct()
+    time.sleep(3)
+    uapi.single_fly_forward(40)
+    time.sleep(3)
+    uapi.single_fly_touchdown()
+    time.sleep(7)
+    #1
+    uapi.single_fly_takeoff()
+    correct()
+    #uapi.single_fly_down(30)
+    #correct()
+    time.sleep(3)
+    uapi.single_fly_right(40)
+    align_to_logo(10)
+    uapi.single_fly_touchdown()
+    time.sleep(7)
+    #2\
+    uapi.single_fly_takeoff()
+    correct()
+    time.sleep(3)
+    uapi.single_fly_forward(60)
+    time.sleep(3)
+    uapi.single_fly_touchdown()
+    time.sleep(7)
+    #7
+    uapi.single_fly_takeoff()
+    correct()
+    time.sleep(3)
+    uapi.single_fly_left(55)
+    time.sleep(3)
+    align = True
+    time.sleep(10)
+    align = False
+    uapi.single_fly_touchdown()
+    time.sleep(7)
+    #3
+    uapi.single_fly_takeoff()
+    correct()
+    time.sleep(3)
+    uapi.single_fly_right(120)
+    time.sleep(3)
+    uapi.single_fly_back(60)
+    time.sleep(3)
+    uapi.single_fly_touchdown()
+    time.sleep(7)
+    #4
+    uapi.single_fly_takeoff()
+    correct()
+    time.sleep(3)
+    uapi.single_fly_back(60)
+    align = True
+    time.sleep(3)
+    align = False
+    uapi.single_fly_touchdown()
+    time.sleep(7)
+    #8
+    uapi.single_fly_takeoff()
+    correct()
+    time.sleep(3)
+    uapi.single_fly_left(65)
+    time.sleep(3)
     uapi.single_fly_touchdown()
