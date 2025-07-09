@@ -8,6 +8,8 @@ import threading
 
 uapi = pyhula.UserApi()
 
+CM = 1.2
+
 def detect_ball(frame, Lcol, Ucol, col):
     # Define HSV range for red color
     
@@ -69,26 +71,23 @@ if not uapi.connect():
 else: 
     print("Connection to station by Wifi")
     threading.Thread(target=vid).start()
-    #uapi.Plane_cmd_camera_angle(1,45)
+    time.sleep(5) # abysmal video loading time
+
     uapi.single_fly_takeoff()
-    #uapi.single_fly_Qrcode_align(0, 0)
-    uapi.single_fly_up(60)
+    uapi.single_fly_back(int(20 / CM))
+    uapi.single_fly_up(int(50 / CM))
     time.sleep(2)
-    uapi.single_fly_back(20)
-    #uapi.single_fly_down(50)
-    uapi.single_fly_right(5) # commenbt =adfiadsio fjssary
-    # uapi.single_fly_back(20)
-    uapi.single_fly_forward(60)
-    # uapi.single_fly_straight_flight(0,-50,40)
-    uapi.single_fly_right(60)
-    uapi.single_fly_down(30)
-    uapi.single_fly_left(65)
-    # uapi.single_fly_straight_flight(0,50,-40)
-    uapi.single_fly_left(65)
-    uapi.single_fly_down(50)
-    # uapi.single_fly_straight_flight(0,50,-40)
-    #time.sleep(3)
-    uapi.single_fly_up(40)
-    #time.sleep(3)
-    #time.sleep(3)
+    uapi.single_fly_left(int(80 / CM))
+    uapi.single_fly_forward(int(65 / CM))
+    uapi.single_fly_down(int(30 / CM))
+    uapi.single_fly_up(int(30 / CM))
+    uapi.single_fly_back(int(65 / CM))
+
+    uapi.single_fly_right(int(80 / CM))
+    uapi.single_fly_right(int(80 / CM))
+    uapi.single_fly_forward(int(65 / CM))
+    uapi.single_fly_down(int(30 / CM))
+    uapi.single_fly_up(int(30 / CM))
+    uapi.single_fly_back(int(65 / CM))
+
     uapi.single_fly_touchdown()
