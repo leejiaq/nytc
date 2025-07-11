@@ -8,7 +8,7 @@ import threading
 
 uapi = pyhula.UserApi()
 align = False
-CM =1.2
+CM =1.25
 detected = False
 
 def correct():
@@ -52,6 +52,7 @@ def vid():
             #cv2.imwrite(f"detected-pillar-{i}.jpg", frame)
         pos = uapi.get_coordinate()
         cv2.putText(frame, str(pos), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+        cv2.putText(frame, "[" + str(pos[0] / CM) + ", " + str(pos[1] / CM) + ", " + str(pos[2] / CM) + "]", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
         cv2.imshow("Detection", frame)
         cv2.waitKey(1)
         time.sleep(0.1)

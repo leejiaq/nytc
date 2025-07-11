@@ -11,8 +11,10 @@ align = False
 
 detected = False
 
-def correct():
-    deviation_coords = [-uapi.get_coordinate()[0], -uapi.get_coordinate()[1]]
+def correct(desired = [0, 0]):
+    print("curr pos",uapi.get_coordinate())
+    deviation_coords = [desired[0]-uapi.get_coordinate()[0], desired[1]-uapi.get_coordinate()[1]]
+    print("correct", deviation_coords)
     uapi.single_fly_straight_flight(deviation_coords[0], deviation_coords[1], 0)
 
 def align_to_tflite(obj):
@@ -52,6 +54,7 @@ def vid():
             #cv2.imwrite(f"detected-pillar-{i}.jpg", frame)
         pos = uapi.get_coordinate()
         cv2.putText(frame, str(pos), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+        cv2.putText(frame, "[" + str(pos[0] / CM) + ", " + str(pos[1] / CM) + ", " + str(pos[2] / CM) + "]", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
         cv2.imshow("Detection", frame)
         cv2.waitKey(1)
         time.sleep(0.1)
@@ -70,6 +73,7 @@ def align_to_logo(duration):
     time.sleep(duration) 
     align = False
     time.sleep(2)
+
 CM = 1.2
 if not uapi.connect():
     print('connect error')
@@ -78,9 +82,12 @@ else:
     uapi.Plane_cmd_camera_angle(1,90)
 
     threading.Thread(target=vid).start()
+    time.sleep(10)
     uapi.single_fly_takeoff() # MAKE SURE CAM ANGLE IS DOWN
-    uapi.single_fly_up(int(120/CM))  # 220 cm
+    uapi.single_fly_up(int(200/CM))  # 220 cm
     uapi.single_fly_forward(int(120/CM))
     time.sleep(2)
-    uapi.single_fly_back(int(50/CM))
+    uapi.single_fly_forward(int(70/CM))
+    uapi.single_fly_back(int(50 + 70/CM))
+    #correct([0, int(55 / CM)])
     uapi.single_fly_touchdown()

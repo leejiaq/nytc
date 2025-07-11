@@ -37,8 +37,8 @@ def detect_ball(frame, Lcol, Ucol, col):
     else:
         return None, None, frame
 
-Lred = np.array([0, 100, 60])
-Ured = np.array([50, 255, 255])
+Lred = np.array([0, 50, 70])
+Ured = np.array([30, 255, 255])
 
 Lblue = np.array([85, 150, 70])
 Ublue = np.array([160, 255, 255])
@@ -53,11 +53,13 @@ def vid():
     while True:
         frame = video.get_video()
         redball = detect_ball(frame, Lred, Ured, (0, 0,255))
+        redballs = detect_ball(frame, Lred, Ured, (0, 0,255))
         blueball = detect_ball(frame, Lblue, Ublue, (255, 0, 0))
         yellball = detect_ball(frame, Lyell, Uyell, (0, 255, 255))
         print(redball, blueball, yellball)
         pos = uapi.get_coordinate()
         cv2.putText(frame, str(pos), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+        cv2.putText(frame, "[" + str(pos[0] / CM) + ", " + str(pos[1] / CM) + ", " + str(pos[2] / CM) + "]", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
         cv2.imshow("NASS", frame)
         cv2.waitKey(1)
         #break       
@@ -74,20 +76,25 @@ else:
     time.sleep(5) # abysmal video loading time
 
     uapi.single_fly_takeoff()
-    uapi.single_fly_back(int(20 / CM))
     uapi.single_fly_up(int(50 / CM))
     time.sleep(2)
     uapi.single_fly_left(int(80 / CM))
-    uapi.single_fly_forward(int(65 / CM))
-    uapi.single_fly_down(int(30 / CM))
-    uapi.single_fly_up(int(30 / CM))
+    uapi.single_fly_forward(int(75 / CM))
+    uapi.single_fly_down(int(40 / CM))
+    uapi.single_fly_up(int(40 / CM))
     uapi.single_fly_back(int(65 / CM))
 
     uapi.single_fly_right(int(80 / CM))
     uapi.single_fly_right(int(80 / CM))
-    uapi.single_fly_forward(int(65 / CM))
-    uapi.single_fly_down(int(30 / CM))
-    uapi.single_fly_up(int(30 / CM))
+    uapi.single_fly_forward(int(75 / CM))
+    uapi.single_fly_down(int(40 / CM))
+    uapi.single_fly_up(int(40 / CM))
+    uapi.single_fly_back(int(65 / CM))
+
+    uapi.single_fly_left(int(80 / CM))
+    uapi.single_fly_forward(int(50 / CM))
+    uapi.single_fly_down(int(40 / CM))
+    uapi.single_fly_up(int(40 / CM))
     uapi.single_fly_back(int(65 / CM))
 
     uapi.single_fly_touchdown()
