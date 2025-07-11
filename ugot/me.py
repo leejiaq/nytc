@@ -65,6 +65,8 @@ def unpick_down():
     got.mechanical_joint_control(0, -10, -40, 500)
     time.sleep(1)
     got.mechanical_clamp_release()
+    time.sleep(2)
+    got.mechanical_joint_control(0, 30, 30, 500)
 
 def seek_qrcode(speed):
     """
