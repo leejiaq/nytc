@@ -5,15 +5,18 @@ import time
 
 got = ugot.UGOT()
 
-SPEED = 50
+SPEED = 100
 SIDE_SPEED = 100
-MAX_ATTEMPTS = 1
 ANGULAR_SPEED = 90
+MAX_ATTEMPTS = 5
+control = 1
 
 def forward(n):
     got.mecanum_move_speed_times(0, SPEED, n, 1) # 1 is backward
+    got.mecanum_turn_speed_times(3,ANGULAR_SPEED,control,2)
 def backward(n):
     got.mecanum_move_speed_times(1, SPEED, n, 1)
+    got.mecanum_turn_speed_times(3,ANGULAR_SPEED,control,2)
 def turn_right(angle):
     got.mecanum_turn_speed_times(3, ANGULAR_SPEED, angle, 2)
 def turn_left(angle):
@@ -63,13 +66,13 @@ def unpick_down():
     time.sleep(1)
     got.mechanical_clamp_release()
 
-
 def seek_qrcode(speed):
     """
     Continuously capture frames, detect AprilTags, align and approach them,
     and attempt pickup when within threshold distance.
     """
     attempts = 0
+    close_to_tag = False
     while True:
         # Read raw JPEG from camera and decode to OpenCV image
         frame = got.read_camera_data()
@@ -86,7 +89,9 @@ def seek_qrcode(speed):
 
 
             # If within pickup range, try grasp
-            if distance < 0.18 or not distance:
+            if distance < 0.25: close_to_tag = True
+            if distance < 0.18 or (distance == "NaN" and close_to_tag):
+                close_to_tag = False
                 if not pick_up():
                     attempts += 1
                 else:
@@ -119,12 +124,12 @@ def seek_qrcode(speed):
         else:
             # No tag detected: stop movement and mark values as NaN
             distance = cx = "NaN"
-            got.mecanum_stop()
+            #got.mecanum_stop()
 
         # Overlay distance and center-x information on frame
         cv2.putText(
             frame,
-            f'Distance: {distance} | Center X: {cx} / 320',
+            f'Distance: {distance} {close_to_tag} | Center X: {cx} / 320',
             (10, 30),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.8,
@@ -166,13 +171,26 @@ if __name__ == "__main__":
     turn_right(90)
     forward(80)
     turn_right(90)
-    seek_qrcode(15)
+    seek_qrcode(10)
     backward(80)
     turn_right(90)
     forward(80)
     turn_left(90)
     forward(60)
     turn_right(90)
-    forward(100)
+    forward(110)
+    turn_left(90)
+    unpick_down()
+    turn_left(90)
+    forward(110)
+    turn_left(90)
+    forward(50)
+    turn_left(90)
+    seek_qrcode(10)
+    backward(90)
+    turn_left(90)
+    forward(50)
+    turn_right(90)
+    forward(90)
     turn_left(90)
     unpick_down()
