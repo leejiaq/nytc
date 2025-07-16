@@ -71,26 +71,56 @@ def align_to_logo(duration):
     time.sleep(2)
 
 CM = 1.2
+
 if not uapi.connect():
     print('connect error')
 else:
     print('success')
-    
+
     threading.Thread(target=vid).start()
+
     time.sleep(10)
     uapi.single_fly_takeoff() # MAKE SURE CAM ANGLE IS DOWN
+    uapi.single_fly_up(int(200/CM))
+    uapi.single_fly_forward(int(120/CM))
+    time.sleep(2)
+    uapi.single_fly_forward(int(70/CM))
+    uapi.single_fly_back(int(70/CM))
+    logo_target = "IMDA"
+    align = True
+    time.sleep(10)
+    logo_target = ""
+    align = False
+    uapi.single_fly_down(int(100/CM))
+    uapi.single_fly_touchdown()
+
+    time.sleep(10)
+    uapi.single_fly_takeoff()
+    uapi.single_fly_up(int(100/CM))
+    uapi.single_fly_straight_flight(int(55/CM),int(60/CM),0)
     logo_target = "GOOGLE"
     align = True
     time.sleep(10)
     logo_target = ""
     align = False
-    #time.sleep(10)
+    uapi.single_fly_down(int(50/CM))
     uapi.single_fly_touchdown()
-    # uapi.single_fly_up(int(200/CM))  # 220 cm
-    # uapi.single_fly_forward(int(120/CM))
-    # time.sleep(2)
-    # uapi.single_fly_forward(int(70/CM))
-    # uapi.single_fly_back(int(50 + 70/CM))
 
-    # #correct([0, int(55 / CM)])
-    # uapi.single_fly_touchdown()
+    time.sleep(10)
+    uapi.single_fly_takeoff()
+    uapi.single_fly_up(int(100/CM))
+    uapi.single_fly_straight_flight(int(120/CM),int(120/CM),0)
+    logo_target = "IMC"
+    align = True
+    time.sleep(10)
+    logo_target = ""
+    align = False
+    uapi.single_fly_down(int(50/CM))
+    uapi.single_fly_down(int(50/CM))
+    uapi.single_fly_down(int(30/CM))
+    uapi.single_fly_touchdown()
+
+    time.sleep(10)
+    uapi.single_fly_takeoff()
+    uapi.single_fly_left(int(65/CM))
+    uapi.single_fly_touchdown()
