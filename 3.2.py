@@ -38,7 +38,7 @@ def vid():
     global align
     global logo_target
     video = hula_video(hula_api=uapi,display=False)
-    detector = onnxdetector(model="nytc2025-fast2.onnx",label="classes.txt")
+    detector = onnxdetector(model="summit-fast2.onnx",label="summit.txt")
     video.video_mode_on()
     while True:
         frame = video.get_video()
@@ -81,22 +81,24 @@ else:
 
     time.sleep(10)
     uapi.single_fly_takeoff() # MAKE SURE CAM ANGLE IS DOWN
+    # SCAN ALL
+    uapi.single_fly_Qrcode_align(0, 0)
     uapi.single_fly_up(int(200/CM))
     uapi.single_fly_forward(int(120/CM))
     time.sleep(2)
     uapi.single_fly_forward(int(70/CM))
-    uapi.single_fly_back(int(70/CM))
+    uapi.single_fly_back(int(60/CM))
+    
     logo_target = "IMDA"
     align = True
     time.sleep(10)
     logo_target = ""
     align = False
-    uapi.single_fly_down(int(100/CM))
+    uapi.single_fly_down(int(50/CM))
     uapi.single_fly_touchdown()
-
     time.sleep(10)
     uapi.single_fly_takeoff()
-    uapi.single_fly_up(int(100/CM))
+    uapi.single_fly_up(int(50/CM))
     uapi.single_fly_straight_flight(int(55/CM),int(60/CM),0)
     logo_target = "GOOGLE"
     align = True
@@ -108,14 +110,13 @@ else:
 
     time.sleep(10)
     uapi.single_fly_takeoff()
-    uapi.single_fly_up(int(100/CM))
+    uapi.single_fly_up(int(50/CM))
     uapi.single_fly_straight_flight(int(120/CM),int(120/CM),0)
     logo_target = "IMC"
     align = True
     time.sleep(10)
     logo_target = ""
     align = False
-    uapi.single_fly_down(int(50/CM))
     uapi.single_fly_down(int(50/CM))
     uapi.single_fly_down(int(30/CM))
     uapi.single_fly_touchdown()
