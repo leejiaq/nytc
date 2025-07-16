@@ -179,6 +179,7 @@ class onnxdetector:
             label = self.classes[class_id]
             current_detected_object = {'label':label,'score':score,'x':cx,'y':cy}
             self.detected_obj.append(current_detected_object)
+            self.detected_dict[current_detected_object["label"]] = current_detected_object
             if score > self.highest_score:
                 self.highest_score = score
                 self.highest_detected_x = cx
@@ -188,7 +189,7 @@ class onnxdetector:
             self.draw_detections(input_image, box, score, class_id)
 
         # Return the modified input image
-        return self.highest_score_obj, input_image
+        return self.highest_score_obj, input_image, self.detected_dict
 
     def get_detected_obj(self):
         return self.detected_obj
@@ -203,6 +204,7 @@ class onnxdetector:
         self.confidence_thres=confidence_level
         self.img = frame
         self.detected_obj = []
+        self.detected_dict = {}
         self.highest_detected_label = ""
         self.highest_detected_x = 0
         self.highest_detected_y = 0
