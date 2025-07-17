@@ -7,7 +7,7 @@ got = ugot.UGOT()
 
 SPEED = 100
 SIDE_SPEED = 100
-ANGULAR_SPEED = 90
+ANGULAR_SPEED = 180
 MAX_ATTEMPTS = 5
 control = 1
 
