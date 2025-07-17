@@ -19,10 +19,10 @@ else:
     # api.single_fly_left(int(20/CM))
     # api.single_fly_down(50)
     
-    api.single_fly_up(100)
-    api.single_fly_forward(50)
+    #api.single_fly_up(100)
+    #api.single_fly_forward(50)
     # api.single_fly_back(20)
-    api.single_fly_Qrcode_align(0,0)
+    #api.single_fly_Qrcode_align(0,0)
     # api.single_fly_down(int(60/CM))
     # api.single_fly_Qrcode_align(0,0)
     # api.single_fly_forward(int(60 / CM)) #subject to changes

@@ -27,8 +27,10 @@ def align_to_tflite(obj): #xrange: 300-500 ; yrange: 200-350
         correction[0] = -1
     elif obj['x'] > 360:
         correction[0] = 1
-    if obj['y'] < 300:
+    if obj['y'] < 200:
         correction[1] = 1
+    elif obj['y'] > 350:
+        correction[1] = -1
     print("correction to logo: ", str(correction))
     uapi.single_fly_straight_flight(correction[0]*correction_step, correction[1]*int(round(correction_step/2)), 0)
     correction = [0, 0]
@@ -80,8 +82,9 @@ else:
 
     time.sleep(1)
     uapi.single_fly_takeoff() # MAKE SURE CAM ANGLE IS DOWN
+    time.sleep(20)
     # SCAN ALL
-    uapi.single_fly_up(int(100/CM))
+    #uapi.single_fly_up(int(100/CM))
     #   uapi.single_fly_forward(int(100/CM))
     
     logo_target = "GOOGLE"

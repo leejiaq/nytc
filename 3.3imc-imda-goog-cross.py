@@ -58,18 +58,6 @@ def vid():
     cv2.destroyAllWindows()
     video.close()
 
-def qr_align(id):
-    for _ in range(10):
-        uapi.single_fly_Qrcode_align(0, id)
-        time.sleep(0.1)
-
-def align_to_logo(duration):
-    global align
-    align = True
-    time.sleep(duration) 
-    align = False
-    time.sleep(2)
-
 CM = 1.2
 
 if not uapi.connect():
