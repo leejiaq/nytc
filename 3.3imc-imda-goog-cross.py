@@ -100,7 +100,7 @@ else:
     uapi.single_fly_takeoff() # +y: 100, 180 cm
     uapi.single_fly_up(int(120/CM)) # y: 300 cm
     uapi.single_fly_straight_flight(-int(120/CM),-int(120/CM),0)
-    logo_target = "GOOGLE"
+    logo_target = "IMDA"
     align = True
     time.sleep(10)
     logo_target = ""
