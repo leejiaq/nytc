@@ -169,7 +169,7 @@ if __name__ == "__main__":
     turn_left(90)
     forward(60)
     turn_left(90)
-    forward(140)
+    forward(120)
     seek_qrcode(10)
     backward(190)
     turn_left(90)
